@@ -49,6 +49,8 @@
       <div class="card-content">
         {{ note.content }}
       </div>
+      <a class="delete-button" href="/delete/{{ note.id }}/">🗑️</a>
+      <a class="update-button" href="/update/{{ note.id }}/">📝</a>
     </div>
   {% endfor %}
 </div>
