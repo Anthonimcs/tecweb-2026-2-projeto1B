@@ -1,0 +1,84 @@
+{% extends "notes/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<header class="appbar">
+  <img
+    class="logo"
+    src="{% static 'notes/img/logo-getit.png' %}"
+    alt="Get-it"
+  />
+
+  <p class="subtitle">
+    Como o Post-it, mas com outro verbo
+  </p>
+</header>
+
+
+<main class="tags-page">
+
+  <div class="tags-toolbar">
+    <a
+      class="secondary-button"
+      href="{% url 'index' %}"
+    >
+      ← Voltar para início
+    </a>
+  </div>
+
+
+  <table class="tags-table">
+
+    <thead>
+      <tr>
+        <th>TAG</th>
+        <th>ANOTAÇÕES</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      {% for tag in tags %}
+
+        <tr>
+          <td>
+            <a
+              class="tag-name-link"
+              href="{% url 'tag' tag.id %}"
+            >
+              #{{ tag.name }}
+            </a>
+          </td>
+
+          <td>
+            <a
+              class="tag-view-button"
+              href="{% url 'tag' tag.id %}"
+              title="Ver anotações dessa tag"
+            >
+              🔗
+            </a>
+          </td>
+        </tr>
+
+      {% empty %}
+
+        <tr>
+          <td
+            class="tags-empty"
+            colspan="2"
+          >
+            Nenhuma tag criada ainda.
+          </td>
+        </tr>
+
+      {% endfor %}
+
+    </tbody>
+
+  </table>
+
+</main>
+
+{% endblock %}

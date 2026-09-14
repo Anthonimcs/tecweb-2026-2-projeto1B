@@ -3,56 +3,123 @@
 
 {% block content %}
 
-<div class="appbar">
+<header class="appbar">
   <img
     class="logo"
     src="{% static 'notes/img/logo-getit.png' %}"
+    alt="Get-it"
   />
 
   <p class="subtitle">
     Como o Post-it, mas com outro verbo
   </p>
-</div>
 
-<form class="form-card" method="post">
-  {% csrf_token %}
+  <a
+    class="btn-ver-tags"
+    href="{% url 'tags' %}"
+  >
+    Ver tags
+  </a>
+</header>
 
-  <input
-    class="form-card-title"
-    id="titulo"
-    type="text"
-    name="titulo"
-    placeholder="Título"
-  />
 
-  <textarea
-    class="autoresize"
-    id="detalhes"
-    name="detalhes"
-    placeholder="Detalhes"
-  ></textarea>
+<main class="main-content">
 
-  <input
-    class="btn"
-    type="submit"
-    value="Adicionar"
-  />
-</form>
+  <form
+    class="form-card"
+    method="post"
+  >
+    {% csrf_token %}
 
-<div class="card-container">
-  {% for note in notes %}
-    <div class="card">
-      <p class="card-title">
-        {{ note.title }}
+    <input
+      class="form-card-title"
+      id="titulo"
+      type="text"
+      name="titulo"
+      placeholder="Título"
+      value="{{ title|default:'' }}"
+    />
+
+    <textarea
+      class="autoresize"
+      id="detalhes"
+      name="detalhes"
+      placeholder="Digite o conteúdo..."
+    >{{ content|default:'' }}</textarea>
+
+    <input
+      class="form-card-tag"
+      id="tag"
+      type="text"
+      name="tag"
+      placeholder="Adicione uma tag"
+      value="{{ tag_name|default:'' }}"
+    />
+
+    {% if error %}
+      <p class="form-error">
+        {{ error }}
+      </p>
+    {% endif %}
+
+    <button
+      class="btn"
+      type="submit"
+    >
+      Adicionar
+    </button>
+  </form>
+
+
+  <div class="card-container">
+    {% for note in notes %}
+
+      <article class="card">
+
+        <p class="card-title">
+          {{ note.title }}
+        </p>
+
+        <div class="card-content">
+          {{ note.content }}
+        </div>
+
+        {% if note.tag %}
+          <a
+            class="card-tag"
+            href="{% url 'tag' note.tag.id %}"
+          >
+            #{{ note.tag.name }}
+          </a>
+        {% endif %}
+
+        <a
+          class="update-button"
+          href="{% url 'update' note.id %}"
+          title="Editar"
+        >
+          📝
+        </a>
+
+        <a
+          class="delete-button"
+          href="{% url 'delete' note.id %}"
+          title="Excluir"
+        >
+          🗑️
+        </a>
+
+      </article>
+
+    {% empty %}
+
+      <p class="empty-message">
+        Nenhuma anotação criada ainda.
       </p>
 
-      <div class="card-content">
-        {{ note.content }}
-      </div>
-      <a class="delete-button" href="/delete/{{ note.id }}/">🗑️</a>
-      <a class="update-button" href="/update/{{ note.id }}/">📝</a>
-    </div>
-  {% endfor %}
-</div>
+    {% endfor %}
+  </div>
+
+</main>
 
 {% endblock %}

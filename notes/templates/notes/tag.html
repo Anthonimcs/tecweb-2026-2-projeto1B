@@ -1,0 +1,88 @@
+{% extends "notes/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<header class="appbar">
+  <img
+    class="logo"
+    src="{% static 'notes/img/logo-getit.png' %}"
+    alt="Get-it"
+  />
+
+  <p class="subtitle">
+    Como o Post-it, mas com outro verbo
+  </p>
+</header>
+
+
+<main class="tag-detail-page">
+
+  <div class="tag-detail-header">
+
+    <h1 class="tag-page-title">
+      #{{ tag.name }}
+    </h1>
+
+    <a
+      class="secondary-button"
+      href="{% url 'tags' %}"
+    >
+      ← Voltar para tags
+    </a>
+
+  </div>
+
+
+  <div class="card-container tag-card-container">
+
+    {% for note in notes %}
+
+      <article class="card">
+
+        <p class="card-title">
+          {{ note.title }}
+        </p>
+
+        <div class="card-content">
+          {{ note.content }}
+        </div>
+
+        <a
+          class="card-tag"
+          href="{% url 'tag' tag.id %}"
+        >
+          #{{ tag.name }}
+        </a>
+
+        <a
+          class="update-button"
+          href="{% url 'update' note.id %}"
+          title="Editar"
+        >
+          📝
+        </a>
+
+        <a
+          class="delete-button"
+          href="{% url 'delete' note.id %}"
+          title="Excluir"
+        >
+          🗑️
+        </a>
+
+      </article>
+
+    {% empty %}
+
+      <p class="empty-message">
+        Nenhuma anotação possui esta tag.
+      </p>
+
+    {% endfor %}
+
+  </div>
+
+</main>
+
+{% endblock %}
