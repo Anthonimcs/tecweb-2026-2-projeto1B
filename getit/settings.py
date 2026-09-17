@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-gtr%c)f&7l@)1%*@y40vftg^q^92=$j9%_em5$+lg_$%i!8*pc'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'getit.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='',
+        default='postgresql://notes_tym1_user:HEvJMg2hh8myeqCmihX3ROk5AgVt3EE2@dpg-dalt0fdbedkc73878g9g-a.ohio-postgres.render.com/notes_tym1',
         conn_max_age=600,
         ssl_require=not DEBUG
     )
