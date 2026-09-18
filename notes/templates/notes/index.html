@@ -47,14 +47,24 @@
       placeholder="Digite o conteúdo..."
     >{{ content|default:'' }}</textarea>
 
-    <input
-      class="form-card-tag"
-      id="tag"
-      type="text"
-      name="tag"
-      placeholder="Adicione uma tag"
-      value="{{ tag_name|default:'' }}"
-    />
+    <div class="tag-input-group">
+      <input
+        class="form-card-tag"
+        id="tags"
+        type="text"
+        name="tags"
+        placeholder="Tags"
+        value="{{ tags_text|default:'' }}"
+        aria-describedby="tags-help"
+      />
+
+      <p
+        class="tag-input-help"
+        id="tags-help"
+      >
+        Separe várias tags por vírgula. Ex.: django, faculdade, projeto
+      </p>
+    </div>
 
     {% if error %}
       <p class="form-error">
@@ -72,6 +82,7 @@
 
 
   <div class="card-container">
+
     {% for note in notes %}
 
       <article class="card">
@@ -84,14 +95,22 @@
           {{ note.content }}
         </div>
 
-        {% if note.tag %}
-          <a
-            class="card-tag"
-            href="{% url 'tag' note.tag.id %}"
-          >
-            #{{ note.tag.name }}
-          </a>
-        {% endif %}
+
+        <div class="card-tags">
+
+          {% for tag in note.tags.all %}
+
+            <a
+              class="card-tag"
+              href="{% url 'tag' tag.id %}"
+            >
+              #{{ tag.name }}
+            </a>
+
+          {% endfor %}
+
+        </div>
+
 
         <a
           class="update-button"
@@ -118,6 +137,7 @@
       </p>
 
     {% endfor %}
+
   </div>
 
 </main>

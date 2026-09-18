@@ -20,9 +20,16 @@
 
   <div class="tag-detail-header">
 
-    <h1 class="tag-page-title">
-      #{{ tag.name }}
-    </h1>
+    <div>
+      <p class="tag-detail-label">
+        Anotações com
+      </p>
+
+      <h1 class="tag-page-title">
+        #{{ tag.name }}
+      </h1>
+    </div>
+
 
     <a
       class="secondary-button"
@@ -48,12 +55,22 @@
           {{ note.content }}
         </div>
 
-        <a
-          class="card-tag"
-          href="{% url 'tag' tag.id %}"
-        >
-          #{{ tag.name }}
-        </a>
+
+        <div class="card-tags">
+
+          {% for note_tag in note.tags.all %}
+
+            <a
+              class="card-tag{% if note_tag.id == tag.id %} card-tag-active{% endif %}"
+              href="{% url 'tag' note_tag.id %}"
+            >
+              #{{ note_tag.name }}
+            </a>
+
+          {% endfor %}
+
+        </div>
+
 
         <a
           class="update-button"

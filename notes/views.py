@@ -1,12 +1,28 @@
 from django.shortcuts import render, redirect
 from .models import Note, Tag
 
+def get_tags_from_text(tags_text):
+    tag_names = [
+        name.strip().lower()
+        for name in tags_text.split(',')
+        if name.strip()
+    ]
+
+    tag_objects = []
+
+    for tag_name in tag_names:
+        tag, created = Tag.objects.get_or_create(
+            name=tag_name
+        )
+        tag_objects.append(tag)
+
+    return tag_objects
 
 def index(request):
     if request.method == 'POST':
         title = (request.POST.get('titulo') or '').strip()
         content = (request.POST.get('detalhes') or '').strip()
-        tag_name = (request.POST.get('tag') or '').strip().lower()
+        tags_text = (request.POST.get('tags') or '').strip()
 
         if not title or not content:
             all_notes = Note.objects.all()
@@ -19,23 +35,18 @@ def index(request):
                     'error': 'Preencha o título e o conteúdo da anotação.',
                     'title': title,
                     'content': content,
-                    'tag_name': tag_name,
+                    'tags_text': tags_text,
                 }
             )
 
-        tag = None
-
-        if tag_name:
-            tag = Tag.objects.filter(name__iexact=tag_name).first()
-
-            if tag is None:
-                tag = Tag.objects.create(name=tag_name)
-
-        Note.objects.create(
+        note = Note.objects.create(
             title=title,
-            content=content,
-            tag=tag
+            content=content
         )
+
+        tag_objects = get_tags_from_text(tags_text)
+
+        note.tags.set(tag_objects)
 
         return redirect('index')
 
@@ -61,46 +72,40 @@ def update(request, id):
     if request.method == 'POST':
         title = (request.POST.get('titulo') or '').strip()
         content = (request.POST.get('detalhes') or '').strip()
-        tag_name = (request.POST.get('tag') or '').strip().lower()
+        tags_text = (request.POST.get('tags') or '').strip()
 
         if not title or not content:
-            note.title = title
-            note.content = content
-
             return render(
                 request,
                 'notes/update.html',
                 {
                     'note': note,
-                    'tag_value': tag_name,
+                    'tags_text': tags_text,
                     'error': 'Preencha o título e o conteúdo da anotação.',
                 }
             )
-
-        if tag_name:
-            tag = Tag.objects.filter(name__iexact=tag_name).first()
-
-            if tag is None:
-                tag = Tag.objects.create(name=tag_name)
-
-            note.tag = tag
-        else:
-            note.tag = None
 
         note.title = title
         note.content = content
         note.save()
 
+        tag_objects = get_tags_from_text(tags_text)
+
+        note.tags.set(tag_objects)
+
         return redirect('index')
 
-    tag_value = note.tag.name if note.tag else ''
+    tags_text = ', '.join(
+        tag.name
+        for tag in note.tags.all()
+    )
 
     return render(
         request,
         'notes/update.html',
         {
             'note': note,
-            'tag_value': tag_value,
+            'tags_text': tags_text,
         }
     )
 
@@ -117,7 +122,7 @@ def tags(request):
 
 def tag(request, tag_id):
     tag = Tag.objects.get(id=tag_id)
-    notes = Note.objects.filter(tag=tag)
+    notes = Note.objects.filter(tags=tag)
 
     return render(
         request,
