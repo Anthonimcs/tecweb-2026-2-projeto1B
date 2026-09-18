@@ -19,12 +19,18 @@
 <main class="tags-page">
 
   <div class="tags-toolbar">
+
+    <h1 class="tags-page-title">
+      Tags
+    </h1>
+
     <a
       class="secondary-button"
       href="{% url 'index' %}"
     >
       ← Voltar para início
     </a>
+
   </div>
 
 
@@ -42,6 +48,7 @@
       {% for tag in tags %}
 
         <tr>
+
           <td>
             <a
               class="tag-name-link"
@@ -60,6 +67,7 @@
               🔗
             </a>
           </td>
+
         </tr>
 
       {% empty %}

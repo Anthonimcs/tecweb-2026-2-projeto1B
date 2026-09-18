@@ -38,19 +38,34 @@
       placeholder="Digite o conteúdo..."
     >{{ note.content }}</textarea>
 
-    <input
-      class="form-card-tag"
-      type="text"
-      value="{{ tag_value }}"
-      name="tag"
-      placeholder="Adicione uma tag"
-    />
+
+    <div class="tag-input-group">
+
+      <input
+        class="form-card-tag"
+        type="text"
+        value="{{ tags_text }}"
+        name="tags"
+        placeholder="Tags"
+        aria-describedby="tags-help"
+      />
+
+      <p
+        class="tag-input-help"
+        id="tags-help"
+      >
+        Separe várias tags por vírgula. Ex.: django, faculdade, projeto
+      </p>
+
+    </div>
+
 
     {% if error %}
       <p class="form-error">
         {{ error }}
       </p>
     {% endif %}
+
 
     <div class="update-buttons">
 

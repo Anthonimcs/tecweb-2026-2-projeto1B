@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-gtr%c)f&7l@)1%*@y40vftg^q^92=$j9%_em5$+lg_$%i!8*pc'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['tecweb-2026-2-projeto1b-x0ts.onrender.com', 'localhost', '127.0.0.1', '0.0.0.0']
 
@@ -81,6 +81,13 @@ DATABASES = {
         ssl_require=not DEBUG
     )
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators
